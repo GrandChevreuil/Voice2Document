@@ -1,0 +1,185 @@
+.uploader-container {
+  padding: 2.5rem 2rem;
+  background: var(--beige);
+  border-bottom: 1px solid var(--beige-dark);
+}
+
+.drop-zone {
+  border: 1px solid var(--black-light);
+  padding: 4rem 2rem;
+  text-align: center;
+  cursor: pointer;
+  background: transparent;
+  margin-bottom: 2rem;
+  transition: all 0.2s ease;
+  opacity: 0.8;
+}
+
+.drop-zone:hover {
+  border-color: var(--black);
+  opacity: 1;
+}
+
+.drop-zone.has-file {
+  border-color: var(--black);
+  background: var(--beige-dark);
+  opacity: 1;
+}
+
+.drop-zone-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.drop-text {
+  font-size: 1rem;
+  color: var(--black);
+  font-weight: 500;
+}
+
+.formats-text {
+  font-size: 0.875rem;
+  color: var(--black-light);
+  opacity: 0.7;
+}
+
+.file-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.file-details {
+  text-align: center;
+}
+
+.file-name {
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--black);
+  margin-bottom: 0.25rem;
+  word-break: break-word;
+}
+
+.file-size {
+  font-size: 0.875rem;
+  color: var(--black-light);
+  opacity: 0.7;
+}
+
+.error-message {
+  background: var(--black);
+  color: var(--beige);
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+  border-left: 3px solid var(--beige);
+  font-size: 0.875rem;
+}
+
+.progress-container {
+  margin-bottom: 1.5rem;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 2px;
+  background: var(--beige-dark);
+  overflow: hidden;
+  margin-bottom: 0.75rem;
+}
+
+.progress-fill {
+  height: 100%;
+  background: var(--black);
+  transition: width 0.3s ease;
+}
+
+.progress-text {
+  text-align: center;
+  color: var(--black-light);
+  font-size: 0.875rem;
+}
+
+.options-container {
+  margin-bottom: 1.5rem;
+  padding: 1.25rem;
+  background: var(--beige-dark);
+  border: 1px solid var(--beige-dark);
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  cursor: pointer;
+  user-select: none;
+}
+
+.checkbox-label input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  margin-top: 2px;
+  cursor: pointer;
+  flex-shrink: 0;
+  accent-color: var(--black);
+}
+
+.checkbox-label span {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--black);
+  display: block;
+}
+
+.checkbox-label small {
+  display: block;
+  font-size: 0.8rem;
+  color: var(--black-light);
+  margin-top: 0.25rem;
+  font-weight: 400;
+  opacity: 0.8;
+}
+
+.transcribe-button {
+  width: 100%;
+  padding: 1.1rem;
+  font-size: 0.95rem;
+  font-weight: 400;
+  color: var(--beige);
+  background: var(--black);
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.transcribe-button:hover:not(:disabled) {
+  opacity: 0.85;
+}
+
+.transcribe-button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+@media (max-width: 768px) {
+  .uploader-container {
+    padding: 1.5rem;
+  }
+
+  .drop-zone {
+    padding: 2rem 1rem;
+  }
+
+  .drop-text {
+    font-size: 0.9rem;
+  }
+  
+  .formats-text {
+    font-size: 0.8rem;
+  }
+}

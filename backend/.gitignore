@@ -1,0 +1,6 @@
+node_modules/
+.scannerwork/
+dist/
+.env
+uploads/
+*.log
