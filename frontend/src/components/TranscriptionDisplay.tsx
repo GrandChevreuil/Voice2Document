@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import axios from 'axios';
+import { Copy, Download, Loader2, BarChart, Sparkles, FileText, Check } from 'lucide-react';
 import './TranscriptionDisplay.css';
 import { TranscriptionResult } from '../App';
 
@@ -11,6 +12,7 @@ function TranscriptionDisplay({ result }: Readonly<TranscriptionDisplayProps>) {
   const [isGenerating, setIsGenerating] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [afficherBrut, setAfficherBrut] = useState(false);
+  const [isCopied, setIsCopied] = useState(false);
 
   const handleDownloadWord = async () => {
     setIsGenerating(true);
@@ -50,6 +52,8 @@ function TranscriptionDisplay({ result }: Readonly<TranscriptionDisplayProps>) {
   const handleCopyText = () => {
     const texteToCopy = afficherBrut ? result.transcriptionBrute! : result.transcription;
     navigator.clipboard.writeText(texteToCopy);
+    setIsCopied(true);
+    setTimeout(() => setIsCopied(false), 2000);
   };
 
   const texteAAfficher = afficherBrut && result.transcriptionBrute
@@ -63,15 +67,35 @@ function TranscriptionDisplay({ result }: Readonly<TranscriptionDisplayProps>) {
       <div className="transcription-header">
         <h2>Transcription</h2>
         <div className="action-buttons">
-          <button className="copy-button" onClick={handleCopyText}>
-            Copier
+          <button className={`copy-button ${isCopied ? 'copied' : ''}`} onClick={handleCopyText}>
+            {isCopied ? (
+              <>
+                <Check size={16} />
+                Copié !
+              </>
+            ) : (
+              <>
+                <Copy size={16} />
+                Copier
+              </>
+            )}
           </button>
           <button
             className={`download-button ${isGenerating ? 'loading' : ''}`}
             onClick={handleDownloadWord}
             disabled={isGenerating}
           >
-            {isGenerating ? 'Génération...' : 'Télécharger Word'}
+            {isGenerating ? (
+              <>
+                <Loader2 size={16} className="spinner" />
+                Génération...
+              </>
+            ) : (
+              <>
+                <Download size={16} />
+                Télécharger .docx (Word)
+              </>
+            )}
           </button>
         </div>
       </div>
@@ -88,12 +112,14 @@ function TranscriptionDisplay({ result }: Readonly<TranscriptionDisplayProps>) {
             className={`toggle-button ${afficherBrut ? '' : 'active'}`}
             onClick={() => setAfficherBrut(false)}
           >
+            <Sparkles size={16} />
             Texte amélioré
           </button>
           <button
             className={`toggle-button ${afficherBrut ? 'active' : ''}`}
             onClick={() => setAfficherBrut(true)}
           >
+            <FileText size={16} />
             Texte brut
           </button>
         </div>
@@ -105,8 +131,14 @@ function TranscriptionDisplay({ result }: Readonly<TranscriptionDisplayProps>) {
       </div>
 
       <div className="stats">
-        <span>{texteAAfficher.split(/\s+/).length} mots</span>
-        <span>{texteAAfficher.length} caractères</span>
+        <span>
+          <BarChart size={14} className="stat-icon" />
+          {texteAAfficher.split(/\s+/).length} mots
+        </span>
+        <span>
+          <BarChart size={14} className="stat-icon" />
+          {texteAAfficher.length} caractères
+        </span>
       </div>
     </div>
   );

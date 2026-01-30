@@ -1,5 +1,6 @@
 node_modules/
 .scannerwork/
+sources/
 dist/
 .env
 *.log

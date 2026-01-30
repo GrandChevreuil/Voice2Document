@@ -58,14 +58,32 @@ router.post('/transcribe', upload.single('audio'), async (req: Request, res: Res
       result.texteAmeliore = texteAmeliore;
     }
 
-    fs.unlinkSync(req.file.path);
+    // Supprimer le fichier original ET le fichier converti s'il existe
+    if (fs.existsSync(req.file.path)) {
+      fs.unlinkSync(req.file.path);
+    }
+    
+    // Supprimer aussi le MP3 converti si différent
+    const mp3Path = req.file.path.replace(path.extname(req.file.path), '.mp3');
+    if (mp3Path !== req.file.path && fs.existsSync(mp3Path)) {
+      fs.unlinkSync(mp3Path);
+    }
 
     res.json(result);
   } catch (error: any) {
     console.error('Erreur lors de la transcription:', error);
 
-    if (req.file && fs.existsSync(req.file.path)) {
-      fs.unlinkSync(req.file.path);
+    // Nettoyer les fichiers en cas d'erreur
+    if (req.file) {
+      if (fs.existsSync(req.file.path)) {
+        fs.unlinkSync(req.file.path);
+      }
+      
+      // Supprimer aussi le MP3 converti si différent
+      const mp3Path = req.file.path.replace(path.extname(req.file.path), '.mp3');
+      if (mp3Path !== req.file.path && fs.existsSync(mp3Path)) {
+        fs.unlinkSync(mp3Path);
+      }
     }
 
     res.status(500).json({

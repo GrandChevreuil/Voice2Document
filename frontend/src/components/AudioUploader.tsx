@@ -1,7 +1,9 @@
 import { useState, useRef, ChangeEvent } from 'react';
 import axios from 'axios';
+import { Upload, Music, Check, AlertCircle, Loader2, Sparkles } from 'lucide-react';
 import './AudioUploader.css';
 import { TranscriptionResult } from '../App';
+import ColdStartWarning from './ColdStartWarning';
 
 interface AudioUploaderProps {
   onTranscriptionComplete: (result: TranscriptionResult) => void;
@@ -12,7 +14,8 @@ function AudioUploader({ onTranscriptionComplete }: Readonly<AudioUploaderProps>
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [progress, setProgress] = useState(0);
-  const [ameliorer, setAmeliorer] = useState(true); // Par défaut, améliorer avec ChatGPT
+  const [ameliorer, setAmeliorer] = useState(true);
+  const [isColdStart, setIsColdStart] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -47,6 +50,10 @@ function AudioUploader({ onTranscriptionComplete }: Readonly<AudioUploaderProps>
     setError(null);
     setProgress(0);
 
+    const coldStartTimer = setTimeout(() => {
+      setIsColdStart(true);
+    }, 3000);
+
     const formData = new FormData();
     formData.append('audio', file);
     formData.append('ameliorer', ameliorer.toString()); // Envoyer l'option d'amélioration
@@ -72,6 +79,9 @@ function AudioUploader({ onTranscriptionComplete }: Readonly<AudioUploaderProps>
         }
       );
 
+      clearTimeout(coldStartTimer);
+      setIsColdStart(false);
+
       onTranscriptionComplete({
         transcription: response.data.texteAmeliore || response.data.transcriptionBrute,
         transcriptionBrute: response.data.transcriptionBrute,
@@ -85,6 +95,8 @@ function AudioUploader({ onTranscriptionComplete }: Readonly<AudioUploaderProps>
         fileInputRef.current.value = '';
       }
     } catch (err: any) {
+      clearTimeout(coldStartTimer);
+      setIsColdStart(false);
       setError(
         err.response?.data?.error || err.response?.data?.details || 'Erreur lors de la transcription'
       );
@@ -124,6 +136,7 @@ function AudioUploader({ onTranscriptionComplete }: Readonly<AudioUploaderProps>
 
   return (
     <div className="uploader-container">
+      <ColdStartWarning show={isColdStart} />
       <button
         type="button"
         className={`drop-zone ${file ? 'has-file' : ''}`}
@@ -142,13 +155,20 @@ function AudioUploader({ onTranscriptionComplete }: Readonly<AudioUploaderProps>
 
         {file ? (
           <div className="file-info">
+            <div className="file-icon">
+              <Music size={32} />
+            </div>
             <div className="file-details">
               <p className="file-name">{file.name}</p>
               <p className="file-size">{(file.size / (1024 * 1024)).toFixed(2)} MB</p>
             </div>
+            <div className="file-check">
+              <Check size={20} />
+            </div>
           </div>
         ) : (
           <div className="drop-zone-content">
+            <Upload size={48} className="upload-icon" />
             <p className="drop-text">
               Glissez-déposez un fichier audio ou cliquez pour sélectionner
             </p>
@@ -159,7 +179,8 @@ function AudioUploader({ onTranscriptionComplete }: Readonly<AudioUploaderProps>
 
       {error && (
         <div className="error-message">
-          {error}
+          <AlertCircle size={18} />
+          <span>{error}</span>
         </div>
       )}
 
@@ -169,6 +190,7 @@ function AudioUploader({ onTranscriptionComplete }: Readonly<AudioUploaderProps>
             <div className="progress-fill" style={{ width: `${progress}%` }}></div>
           </div>
           <p className="progress-text">
+            <Loader2 size={16} className="spinner" />
             {getProgressText()}
           </p>
         </div>
@@ -182,8 +204,13 @@ function AudioUploader({ onTranscriptionComplete }: Readonly<AudioUploaderProps>
             onChange={(e) => setAmeliorer(e.target.checked)}
             disabled={isLoading}
           />
-          <span>Améliorer avec ChatGPT (GPT-4o-mini)</span>
-          <small>Correction et restructuration du texte</small>
+          <div className="checkbox-content">
+            <span>
+              <Sparkles size={16} className="inline-icon" />
+              Améliorer avec ChatGPT (GPT-4o-mini)
+            </span>
+            <small>Correction et restructuration du texte</small>
+          </div>
         </label>
       </div>
 
@@ -192,7 +219,14 @@ function AudioUploader({ onTranscriptionComplete }: Readonly<AudioUploaderProps>
         onClick={handleTranscribe}
         disabled={!file || isLoading}
       >
-        {isLoading ? 'Traitement en cours...' : 'Transcrire'}
+        {isLoading ? (
+          <>
+            <Loader2 size={18} className="spinner" />
+            Traitement en cours...
+          </>
+        ) : (
+          'Transcrire'
+        )}
       </button>
     </div>
   );

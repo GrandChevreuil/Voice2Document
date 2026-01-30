@@ -6,6 +6,7 @@
 
 .drop-zone {
   border: 1px solid var(--black-light);
+  border-radius: 12px;
   padding: 4rem 2rem;
   text-align: center;
   cursor: pointer;
@@ -13,6 +14,7 @@
   margin-bottom: 2rem;
   transition: all 0.2s ease;
   opacity: 0.8;
+  width: 100%;
 }
 
 .drop-zone:hover {
@@ -45,11 +47,27 @@
   opacity: 0.7;
 }
 
+.upload-icon {
+  opacity: 0.5;
+  margin-bottom: 1rem;
+}
+
 .file-info {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.5rem;
+  gap: 1rem;
+}
+
+.file-icon {
+  width: 64px;
+  height: 64px;
+  background: var(--black);
+  color: var(--beige);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .file-details {
@@ -70,13 +88,29 @@
   opacity: 0.7;
 }
 
+.file-check {
+  width: 32px;
+  height: 32px;
+  background: var(--black);
+  color: var(--beige);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 0.5rem;
+}
+
 .error-message {
   background: var(--black);
   color: var(--beige);
   padding: 1rem;
   margin-bottom: 1.5rem;
   border-left: 3px solid var(--beige);
+  border-radius: 8px;
   font-size: 0.875rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
 }
 
 .progress-container {
@@ -101,6 +135,10 @@
   text-align: center;
   color: var(--black-light);
   font-size: 0.875rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
 }
 
 .options-container {
@@ -108,6 +146,7 @@
   padding: 1.25rem;
   background: var(--beige-dark);
   border: 1px solid var(--beige-dark);
+  border-radius: 10px;
 }
 
 .checkbox-label {
@@ -143,6 +182,10 @@
   opacity: 0.8;
 }
 
+.checkbox-content {
+  flex: 1;
+}
+
 .transcribe-button {
   width: 100%;
   padding: 1.1rem;
@@ -151,10 +194,35 @@
   color: var(--beige);
   background: var(--black);
   border: none;
+  border-radius: 10px;
   cursor: pointer;
   transition: all 0.2s ease;
   letter-spacing: 0.05em;
   text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.spinner {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.inline-icon {
+  display: inline;
+  vertical-align: middle;
+  margin-right: 0.25rem;
 }
 
 .transcribe-button:hover:not(:disabled) {
@@ -178,8 +246,16 @@
   .drop-text {
     font-size: 0.9rem;
   }
-  
+
   .formats-text {
     font-size: 0.8rem;
+  }
+
+  .transcribe-button {
+    font-size: 0.85rem;
+    padding: 1rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 }

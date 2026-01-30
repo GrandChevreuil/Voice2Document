@@ -1,0 +1,6 @@
+{
+    "sonarlint.connectedMode.project": {
+        "connectionId": "grandchevreuil",
+        "projectKey": "GrandChevreuil_Voice2Document"
+    }
+}
